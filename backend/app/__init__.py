@@ -12,7 +12,16 @@ def create_app(config_class=Config):
 
     # Initialize extensions
     db.init_app(app)
-    CORS(app)
+
+    # Configure CORS to allow requests from frontend
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": ["http://localhost:3000", "https://*.vercel.app"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True
+        }
+    })
 
 
     # Register blueprints
