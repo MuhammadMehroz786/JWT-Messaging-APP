@@ -15,6 +15,7 @@ function ProtectedRoute({ children }) {
   return isAuthenticated() ? children : <Navigate to="/login" />;
 }
 
+
 // Public Route Component (redirect to dashboard if already logged in)
 function PublicRoute({ children }) {
   return !isAuthenticated() ? children : <Navigate to="/dashboard" />;
