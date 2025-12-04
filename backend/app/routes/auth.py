@@ -5,7 +5,11 @@ from app.utils.jwt_utils import generate_access_token, generate_refresh_token, d
 from app.utils.decorators import token_required
 import jwt
 
+import logging
+
 bp = Blueprint('auth', __name__, url_prefix='/api/auth')
+
+logging.basicConfig(level=logging.INFO)
 
 
 @bp.route('/register', methods=['POST'])
@@ -31,12 +35,16 @@ def register():
         }
     """
     try:
+        print(f"Register request headers: {request.headers}", flush=True)
+        print(f"Register request body raw: {request.get_data(as_text=True)}", flush=True)
         data = request.get_json()
+        print(f"Register request json: {data}", flush=True)
 
         # Validate required fields
         required_fields = ['email', 'username', 'password', 'user_type']
         for field in required_fields:
             if not data.get(field):
+                print(f"Missing field: {field} in {data}", flush=True)
                 return jsonify({'error': f'Missing required field: {field}'}), 400
 
         # Validate user_type
@@ -98,16 +106,25 @@ def login():
         }
     """
     try:
+        # Get JSON data
         data = request.get_json()
 
-        # Validate required fields
-        if not data.get('email') or not data.get('password'):
+        # Validate data exists
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+
+        # Validate required fields - accept both 'email' and 'username' for compatibility
+        email = data.get('email', '') or data.get('username', '')
+        email = email.strip() if email else ''
+        password = data.get('password', '')
+
+        if not email or not password:
             return jsonify({'error': 'Email and password are required'}), 400
 
         # Find user by email
-        user = User.query.filter_by(email=data['email']).first()
+        user = User.query.filter_by(email=email).first()
 
-        if not user or not user.check_password(data['password']):
+        if not user or not user.check_password(password):
             return jsonify({'error': 'Invalid email or password'}), 401
 
         # Generate tokens

@@ -14,6 +14,7 @@ def create_app(config_class=Config):
     db.init_app(app)
     CORS(app)
 
+
     # Register blueprints
     from app.routes import auth, messaging, jobs, users, admin
     app.register_blueprint(auth.bp)

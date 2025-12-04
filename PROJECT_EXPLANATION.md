@@ -563,4 +563,4 @@ CORS(app)  # Allows React frontend to make requests
 
 **Created for Computer Network Course**
 **Instructor: Sir Shaheer**
-**Technology Stack: Flask + React + JWT + SQLite**
+**Technology Stack: Flask + React + JWT + SQLite*

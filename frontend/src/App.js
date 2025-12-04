@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import Login from './components/auth/Login';
+import LoginNew from './components/auth/LoginNew';
 import Register from './components/auth/Register';
 import Dashboard from './pages/Dashboard';
 import { isAuthenticated } from './utils/auth';
@@ -34,7 +34,7 @@ function App() {
           path="/login"
           element={
             <PublicRoute>
-              <Login />
+              <LoginNew />
             </PublicRoute>
           }
         />
