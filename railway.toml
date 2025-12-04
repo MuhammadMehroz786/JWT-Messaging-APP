@@ -1,8 +1,8 @@
 [build]
-builder = "DOCKERFILE"
-dockerfilePath = "backend/Dockerfile"
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+watchPatterns = ["backend/**"]
 
 [deploy]
 startCommand = "cd backend && gunicorn app:app --bind 0.0.0.0:$PORT"
 restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10
