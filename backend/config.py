@@ -5,11 +5,15 @@ from datetime import timedelta
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    # Secret key for JWT
+    # Secret key for JWT - use environment variable in production
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
 
-    # Database configuration
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'instance', 'cn_project.db')
+    # Database configuration - Railway compatible
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    if DATABASE_URL and DATABASE_URL.startswith('postgres://'):
+        DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
+
+    SQLALCHEMY_DATABASE_URI = DATABASE_URL or ('sqlite:///' + os.path.join(basedir, 'instance', 'cn_project.db'))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # JWT configuration
@@ -23,3 +27,6 @@ class Config:
 
     # CORS configuration
     CORS_HEADERS = 'Content-Type'
+
+    # Railway deployment settings
+    PORT = int(os.environ.get('PORT', 8000))
